@@ -1,26 +1,32 @@
 name: Ejecutar búsqueda con Selenium
 
 on:
+  workflow_dispatch:
+
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   selenium-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '14' # Puedes especificar otra versión si lo deseas
+        cache: 'npm'
+        # node-version: '14' # Puedes especificar otra versión si lo deseas
 
     - name: Instalar dependencias
-      run: |
+      run:
         npm install selenium-webdriver chromedriver
 
     - name: Ejecutar script de Selenium
-      run: |
-        node busquedaDatacrm.js
+      run:
+        npm start
